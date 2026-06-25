@@ -1,0 +1,3 @@
+/home/emwi/Documents/projects/3dEngine/build/_deps/assimp-subbuild/CMakeFiles/assimp-populate.dir
+/home/emwi/Documents/projects/3dEngine/build/_deps/assimp-subbuild/CMakeFiles/edit_cache.dir
+/home/emwi/Documents/projects/3dEngine/build/_deps/assimp-subbuild/CMakeFiles/rebuild_cache.dir

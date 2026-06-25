@@ -1,0 +1,23 @@
+# Configuration file for 3DEngine
+# You can reload this file in-game by pressing the 'R' key!
+
+# Camera settings
+camera_speed=2.5
+camera_speed_fast=50.0
+camera_speed_slow=0.5
+
+# Fog settings
+fog_mode=2
+fog_density=0.03
+fog_start=10.0
+fog_end=50.0
+fog_color_r=0.5
+fog_color_g=0.6
+fog_color_b=0.9
+
+# Light settings
+ambient_intensity=0.2
+light_intensity=0.5
+light_color_r=1.0
+light_color_g=1.0
+light_color_b=1.0
