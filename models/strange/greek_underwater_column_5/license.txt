@@ -1,0 +1,8 @@
+Model Information:
+* title:	Greek underwater column 5
+* source:	https://sketchfab.com/3d-models/greek-underwater-column-5-d6d71552d2cc4a17aa2d2f5fc1e49dca
+* author:	assetfactory (https://sketchfab.com/assetfactory)
+
+Model License:
+* license type:	SKETCHFAB Standard (https://sketchfab.com/licenses)
+* requirements:	Under basic restrictions, use worldwide, on all types of media, commercially or not, and in all types of derivative works

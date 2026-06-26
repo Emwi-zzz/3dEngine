@@ -60,7 +60,7 @@ void Scene::CheckCollisionSphere(glm::vec3& sphereCenter, float radius) const
     }
 }
 
-void Scene::AddPointLight(const PointLight& light)
+void Scene::AddPointLight(std::shared_ptr<PointLight> light)
 {
     m_PointLights.push_back(light);
 }

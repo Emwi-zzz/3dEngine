@@ -84,6 +84,7 @@ void ParticleSystem::RespawnParticle(Particle& p) {
 }
 
 void ParticleSystem::Update(float dt) {
+    if (!IsActive) return;
     for (auto& p : m_Particles) {
         p.Life += dt;
         if (p.Life >= p.MaxLife) {
@@ -95,6 +96,7 @@ void ParticleSystem::Update(float dt) {
 }
 
 void ParticleSystem::DrawForward(const Shader& shader) const {
+    if (!IsActive) return;
     std::vector<float> instanceData;
     instanceData.reserve(m_Particles.size() * 20);
 

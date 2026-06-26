@@ -1,0 +1,10 @@
+# Configuration for Greek Column
+pos_x=10.0
+pos_y=-2.0
+pos_z=10.0
+rot_x=0.0
+rot_y=0.0
+rot_z=0.0
+scale_x=0.01
+scale_y=0.01
+scale_z=0.01

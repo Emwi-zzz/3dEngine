@@ -20,6 +20,7 @@ public:
     virtual void CheckCollision(glm::vec3& globalSphereCenter, float radius) const;
 
     std::string Name;
+    bool IsActive = true;
     bool HasCollision = true;
     glm::vec3 Position;
     glm::vec3 Rotation;

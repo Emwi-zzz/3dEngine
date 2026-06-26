@@ -1,0 +1,11 @@
+Model Information:
+* title:	Shipwreck-mv-hebat-allah
+* source:	https://sketchfab.com/3d-models/shipwreck-mv-hebat-allah-0ac7b2b7fd6a4c6da1bf5d1a6648d13c
+* author:	CloudHubOmniTeam (https://sketchfab.com/cloudhub)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Shipwreck-mv-hebat-allah" (https://sketchfab.com/3d-models/shipwreck-mv-hebat-allah-0ac7b2b7fd6a4c6da1bf5d1a6648d13c) by CloudHubOmniTeam (https://sketchfab.com/cloudhub) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

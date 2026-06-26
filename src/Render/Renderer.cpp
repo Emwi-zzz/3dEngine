@@ -92,10 +92,10 @@ void Renderer::Draw(const Scene& scene, const Camera& camera, float width, float
     for (size_t i = 0; i < scene.GetPointLights().size() && i < 32; ++i) {
         const auto& pl = scene.GetPointLights()[i];
         std::string prefix = "pointLights[" + std::to_string(i) + "].";
-        glUniform3fv(glGetUniformLocation(m_LightingShader->GetID(), (prefix + "position").c_str()), 1, &pl.Position[0]);
-        glUniform3fv(glGetUniformLocation(m_LightingShader->GetID(), (prefix + "color").c_str()), 1, &pl.Color[0]);
-        glUniform1f(glGetUniformLocation(m_LightingShader->GetID(), (prefix + "intensity").c_str()), pl.Intensity);
-        glUniform1f(glGetUniformLocation(m_LightingShader->GetID(), (prefix + "radius").c_str()), pl.Radius);
+        glUniform3fv(glGetUniformLocation(m_LightingShader->GetID(), (prefix + "position").c_str()), 1, &pl->Position[0]);
+        glUniform3fv(glGetUniformLocation(m_LightingShader->GetID(), (prefix + "color").c_str()), 1, &pl->Color[0]);
+        glUniform1f(glGetUniformLocation(m_LightingShader->GetID(), (prefix + "intensity").c_str()), pl->Intensity);
+        glUniform1f(glGetUniformLocation(m_LightingShader->GetID(), (prefix + "radius").c_str()), pl->Radius);
     }
 
     renderQuad();

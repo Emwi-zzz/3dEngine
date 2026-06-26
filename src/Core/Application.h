@@ -42,4 +42,12 @@ private:
     float m_LastX;
     float m_LastY;
     bool m_FirstMouse;
+
+    int m_CoinsCollected = 0;
+    bool m_PlayerCollisionEnabled = true;
+    bool m_CKeyPressed = false;
+    bool m_HintEnabled = false;
+    bool m_HKeyPressed = false;
+    std::vector<std::shared_ptr<class GoldCoin>> m_GoldCoins;
+    std::vector<std::shared_ptr<class FlockingFish>> m_Flock;
 };

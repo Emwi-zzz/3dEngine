@@ -1,0 +1,11 @@
+Model Information:
+* title:	Low-Poly Gold Coin
+* source:	https://sketchfab.com/3d-models/low-poly-gold-coin-7a40d686492545d1a6f6bd0c487f1cb9
+* author:	BillieBones (https://sketchfab.com/BillieBones)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Low-Poly Gold Coin" (https://sketchfab.com/3d-models/low-poly-gold-coin-7a40d686492545d1a6f6bd0c487f1cb9) by BillieBones (https://sketchfab.com/BillieBones) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

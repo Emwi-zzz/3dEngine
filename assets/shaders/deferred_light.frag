@@ -64,6 +64,11 @@ void main()
         if (dist < pointLights[i].radius) {
             plDir = normalize(plDir);
             float plDiff = max(dot(norm, plDir), 0.0);
+            
+            // Subsurface/Glow hack: illuminate object from inside if light is very close
+            float innerGlow = smoothstep(2.0, 0.0, dist);
+            plDiff = max(plDiff, innerGlow);
+            
             vec3 plDiffuse = plDiff * Diffuse * pointLights[i].color * pointLights[i].intensity;
             
             vec3 plHalfway = normalize(plDir + viewDir);

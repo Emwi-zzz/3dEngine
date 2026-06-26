@@ -10,6 +10,7 @@ Entity::Entity(const std::string& name, std::shared_ptr<Model> model, glm::vec3 
 
 void Entity::Draw(const Shader& shader) const
 {
+    if (!IsActive) return;
     if (m_Model)
     {
         shader.SetMat4("model", GetModelMatrix());
@@ -60,7 +61,7 @@ AABB Entity::GetGlobalAABB() const
 
 void Entity::CheckCollision(glm::vec3& globalSphereCenter, float radius) const
 {
-    if (!HasCollision || !m_Model) return;
+    if (!IsActive || !HasCollision || !m_Model) return;
 
     AABB globalAABB = GetGlobalAABB();
     if (!CheckCollisionAABBSphere(globalAABB, globalSphereCenter, radius)) return;

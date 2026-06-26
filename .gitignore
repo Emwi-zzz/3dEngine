@@ -43,6 +43,10 @@ compile_commands.json
 CTestTestfile.cmake
 _deps/
 
+# Large files
+*.zip
+models/strange/shipwreck-mv-hebat-allah/scene.bin
+
 # OS generated files
 .DS_Store
 .DS_Store?

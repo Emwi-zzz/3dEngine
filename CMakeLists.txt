@@ -38,6 +38,26 @@ set(ASSIMP_BUILD_ZLIB ON CACHE BOOL "" FORCE)
 set(ASSIMP_NO_EXPORT ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(assimp)
 
+# ImGui
+FetchContent_Declare(
+    imgui
+    GIT_REPOSITORY https://github.com/ocornut/imgui.git
+    GIT_TAG v1.89.9
+)
+FetchContent_Populate(imgui)
+add_library(imgui STATIC
+    ${imgui_SOURCE_DIR}/imgui.cpp
+    ${imgui_SOURCE_DIR}/imgui_demo.cpp
+    ${imgui_SOURCE_DIR}/imgui_draw.cpp
+    ${imgui_SOURCE_DIR}/imgui_tables.cpp
+    ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_glfw.cpp
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+)
+target_include_directories(imgui PUBLIC ${imgui_SOURCE_DIR} ${imgui_SOURCE_DIR}/backends)
+target_link_libraries(imgui PRIVATE glfw glad)
+
+
 # Glad (generated via pip in third_party)
 add_library(glad third_party/glad/src/gl.c)
 target_include_directories(glad PUBLIC third_party/glad/include)
@@ -52,4 +72,4 @@ target_compile_definitions(3dEngine PRIVATE ENABLE_ENDLESS_FLOOR)
 
 # Includes and Linking
 target_include_directories(3dEngine PRIVATE src)
-target_link_libraries(3dEngine PRIVATE glfw glm::glm glad assimp ${CMAKE_DL_LIBS})
+target_link_libraries(3dEngine PRIVATE glfw glm::glm glad assimp imgui ${CMAKE_DL_LIBS})
