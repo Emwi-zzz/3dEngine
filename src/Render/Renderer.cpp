@@ -12,16 +12,34 @@ Renderer::Renderer(unsigned int width, unsigned int height) {
     m_LightingShader = std::make_unique<Shader>("../assets/shaders/deferred_light.vert", "../assets/shaders/deferred_light.frag");
     m_ParticleShader = std::make_unique<Shader>("../assets/shaders/particle.vert", "../assets/shaders/particle.frag");
     m_GodRaysShader = std::make_unique<Shader>("../assets/shaders/god_rays.vert", "../assets/shaders/god_rays.frag");
+    m_ShadowShader = std::make_unique<Shader>("../assets/shaders/shadow.vert", "../assets/shaders/shadow.frag");
 
     m_LightingShader->Bind();
     glUniform1i(glGetUniformLocation(m_LightingShader->GetID(), "gPosition"), 0);
     glUniform1i(glGetUniformLocation(m_LightingShader->GetID(), "gNormal"), 1);
     glUniform1i(glGetUniformLocation(m_LightingShader->GetID(), "gAlbedoSpec"), 2);
+    glUniform1i(glGetUniformLocation(m_LightingShader->GetID(), "shadowMap"), 3);
     m_LightingShader->Unbind();
     
     m_GodRaysShader->Bind();
     glUniform1i(glGetUniformLocation(m_GodRaysShader->GetID(), "screenTexture"), 0);
     m_GodRaysShader->Unbind();
+
+    glGenFramebuffers(1, &depthMapFBO);
+    glGenTextures(1, &depthMap);
+    glBindTexture(GL_TEXTURE_2D, depthMap);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    float borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
+    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+    glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+    glDrawBuffer(GL_NONE);
+    glReadBuffer(GL_NONE);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     setupQuad();
     setupScreenFBO(width, height);
@@ -32,6 +50,8 @@ Renderer::~Renderer() {
     glDeleteBuffers(1, &quadVBO);
     glDeleteFramebuffers(1, &screenFBO);
     glDeleteTextures(1, &screenColorBuffer);
+    glDeleteFramebuffers(1, &depthMapFBO);
+    glDeleteTextures(1, &depthMap);
 }
 
 void Renderer::Resize(unsigned int width, unsigned int height) {
@@ -41,6 +61,34 @@ void Renderer::Resize(unsigned int width, unsigned int height) {
 }
 
 void Renderer::Draw(const Scene& scene, const Camera& camera, float width, float height, Config* config) {
+    // Unbind any textures from previous frame to prevent feedback loops (Droste effect) on untextured meshes
+    for (int i = 0; i < 4; ++i) {
+        glActiveTexture(GL_TEXTURE0 + i);
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    glm::vec3 lightDir(0.0f, -1.0f, 0.0f); // Default light dir
+
+    // 0. Shadow Pass
+    glm::mat4 lightProjection, lightView;
+    glm::mat4 lightSpaceMatrix;
+    float near_plane = 1.0f, far_plane = 75.0f;
+    lightProjection = glm::ortho(-20.0f, 20.0f, -20.0f, 20.0f, near_plane, far_plane);
+    // Center light view loosely around player or origin
+    glm::vec3 lightTarget = camera.Position;
+    lightView = glm::lookAt(lightTarget - lightDir * 20.0f, lightTarget, glm::vec3(0.0, 0.0, -1.0));
+    lightSpaceMatrix = lightProjection * lightView;
+
+    m_ShadowShader->Bind();
+    m_ShadowShader->SetMat4("lightSpaceMatrix", lightSpaceMatrix);
+
+    glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+    glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+    glClear(GL_DEPTH_BUFFER_BIT);
+    // Render scene for depth
+    scene.Draw(*m_ShadowShader);
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
     // 1. Geometry Pass: render scene's geometry/color data into gbuffer
     m_GBuffer->BindForWriting();
     glViewport(0, 0, width, height);
@@ -68,9 +116,11 @@ void Renderer::Draw(const Scene& scene, const Camera& camera, float width, float
     glBindTexture(GL_TEXTURE_2D, m_GBuffer->gNormal);
     glActiveTexture(GL_TEXTURE2);
     glBindTexture(GL_TEXTURE_2D, m_GBuffer->gAlbedoSpec);
+    glActiveTexture(GL_TEXTURE3);
+    glBindTexture(GL_TEXTURE_2D, depthMap);
     
     // Set lighting uniforms
-    glm::vec3 lightDir(0.0f, -1.0f, 0.0f);
+    m_LightingShader->SetMat4("lightSpaceMatrix", lightSpaceMatrix);
     glUniform3fv(glGetUniformLocation(m_LightingShader->GetID(), "lightDir"), 1, &lightDir[0]);
     glUniform3fv(glGetUniformLocation(m_LightingShader->GetID(), "viewPos"), 1, &camera.Position[0]);
     

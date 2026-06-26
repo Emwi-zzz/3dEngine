@@ -60,7 +60,11 @@ void Mesh::Draw(const Shader& shader) const
     unsigned int diffuseNr = 1;
     unsigned int specularNr = 1;
     unsigned int normalNr = 1;
+    unsigned int metallicRoughnessNr = 1;
     
+    bool hasNormalMap = false;
+    bool hasMetallicRoughnessMap = false;
+
     for(unsigned int i = 0; i < textures.size(); i++)
     {
         glActiveTexture(GL_TEXTURE0 + i); 
@@ -70,13 +74,21 @@ void Mesh::Draw(const Shader& shader) const
             number = std::to_string(diffuseNr++);
         else if(name == "texture_specular")
             number = std::to_string(specularNr++);
-        else if(name == "texture_normal")
+        else if(name == "texture_normal") {
             number = std::to_string(normalNr++);
+            hasNormalMap = true;
+        } else if(name == "texture_metallicRoughness") {
+            number = std::to_string(metallicRoughnessNr++);
+            hasMetallicRoughnessMap = true;
+        }
         
         glUniform1i(glGetUniformLocation(shader.GetID(), (name + number).c_str()), i);
         glBindTexture(GL_TEXTURE_2D, textures[i]->ID);
     }
     
+    shader.SetInt("hasNormalMap", hasNormalMap ? 1 : 0);
+    shader.SetInt("hasMetallicRoughnessMap", hasMetallicRoughnessMap ? 1 : 0);
+
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);

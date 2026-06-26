@@ -11,6 +11,7 @@
 #include "Scene/EndlessFloor/EndlessFloor.h"
 #endif
 
+#include "Graphics/PTFTube.h"
 #include "Graphics/ParticleSystem.h"
 #include "Scene/GoldCoin.h"
 #include "Scene/SoloFish.h"
@@ -96,6 +97,19 @@ void Application::Init()
     auto bubbles = std::make_shared<ParticleSystem>(150, glm::vec3(0.0f, -1.0f, 0.0f), 20.0f);
     m_Scene->AddEntity(bubbles);
     
+    // Add PTF Tube (e.g. an underwater pipe or cable)
+    std::vector<glm::vec3> pipeControlPoints = {
+        glm::vec3(-15.0f, 0.5f, -15.0f),
+        glm::vec3(-10.0f, 0.5f, -10.0f),
+        glm::vec3(-5.0f, 1.5f, -10.0f),
+        glm::vec3(0.0f, 0.5f, -5.0f),
+        glm::vec3(5.0f, 2.0f, 0.0f),
+        glm::vec3(10.0f, 0.5f, 5.0f),
+        glm::vec3(15.0f, 0.5f, 10.0f)
+    };
+    auto pipe = std::make_shared<PTFTube>(pipeControlPoints, 0.2f, 20, 16);
+    m_Scene->AddEntity(pipe);
+
     // Add Point Lights
     auto pl1 = std::make_shared<PointLight>();
     pl1->Position = glm::vec3(0.0f, 1.0f, -5.0f);

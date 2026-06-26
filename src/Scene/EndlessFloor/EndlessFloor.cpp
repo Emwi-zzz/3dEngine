@@ -108,6 +108,15 @@ EndlessFloor::~EndlessFloor()
 
 void EndlessFloor::Draw(const Shader& shader) const
 {
+    // If the shader being used is the shadow map shader (which has lightSpaceMatrix), use it!
+    if (glGetUniformLocation(shader.GetID(), "lightSpaceMatrix") != -1) {
+        shader.SetMat4("model", GetModelMatrix());
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, m_IndexCount, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
+        return;
+    }
+
     glm::mat4 proj, view;
     glGetUniformfv(shader.GetID(), glGetUniformLocation(shader.GetID(), "projection"), &proj[0][0]);
     glGetUniformfv(shader.GetID(), glGetUniformLocation(shader.GetID(), "view"), &view[0][0]);
@@ -120,7 +129,7 @@ void EndlessFloor::Draw(const Shader& shader) const
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, m_IndexCount, GL_UNSIGNED_INT, 0);
     glBindVertexArray(0);
-    
+
     shader.Bind();
 }
 

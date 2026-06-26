@@ -1,6 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/quaternion.hpp>
 
 class Camera {
 public:
@@ -16,8 +17,8 @@ public:
     glm::vec3 Right;
     glm::vec3 WorldUp;
 
-    float Yaw;
-    float Pitch;
+    glm::quat Orientation;
+
     float MovementSpeed;
     float MouseSensitivity;
     float Zoom;

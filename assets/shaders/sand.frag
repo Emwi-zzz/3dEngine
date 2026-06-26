@@ -1,6 +1,6 @@
 #version 330 core
 layout (location = 0) out vec3 gPosition;
-layout (location = 1) out vec3 gNormal;
+layout (location = 1) out vec4 gNormal;
 layout (location = 2) out vec4 gAlbedoSpec;
 
 in vec3 WorldPos;
@@ -9,7 +9,8 @@ in vec3 Normal;
 void main()
 {
     gPosition = WorldPos;
-    gNormal = normalize(Normal);
+    gNormal.rgb = normalize(Normal);
+    gNormal.a = 0.0; // 0.0 metallic for sand
     
     // Sand color variations based on height or noise
     vec3 baseColor = vec3(0.82, 0.73, 0.55);
@@ -20,5 +21,5 @@ void main()
     vec3 finalColor = mix(darkColor, baseColor, noise * 0.2 + 0.8);
 
     gAlbedoSpec.rgb = finalColor;
-    gAlbedoSpec.a = 0.0;
+    gAlbedoSpec.a = 0.9; // 0.9 roughness for sand
 }

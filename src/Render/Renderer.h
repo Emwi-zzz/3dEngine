@@ -21,6 +21,11 @@ private:
     std::unique_ptr<Shader> m_LightingShader;
     std::unique_ptr<Shader> m_ParticleShader;
     std::unique_ptr<Shader> m_GodRaysShader;
+    std::unique_ptr<Shader> m_ShadowShader;
+
+    unsigned int depthMapFBO;
+    unsigned int depthMap;
+    const unsigned int SHADOW_WIDTH = 2048, SHADOW_HEIGHT = 2048;
 
     unsigned int quadVAO, quadVBO;
     unsigned int screenFBO, screenColorBuffer;
