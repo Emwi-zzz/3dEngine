@@ -11,13 +11,14 @@ void main()
     gPosition = WorldPos;
     gNormal = normalize(Normal);
     
-    // Warm sand color
-    vec3 sandColor = vec3(0.76, 0.70, 0.50);
+    // Sand color variations based on height or noise
+    vec3 baseColor = vec3(0.82, 0.73, 0.55);
+    vec3 darkColor = vec3(0.70, 0.60, 0.40);
     
-    // Add subtle variation based on height
-    float heightVar = smoothstep(0.0, 5.0, WorldPos.y);
-    sandColor = mix(sandColor, vec3(0.80, 0.75, 0.55), heightVar);
-    
-    gAlbedoSpec.rgb = sandColor;
-    gAlbedoSpec.a = 0.0; // Rough material, no specularity
+    // Simple variation based on WorldPos to make it look less uniform
+    float noise = fract(sin(dot(WorldPos.xz, vec2(12.9898, 78.233))) * 43758.5453);
+    vec3 finalColor = mix(darkColor, baseColor, noise * 0.2 + 0.8);
+
+    gAlbedoSpec.rgb = finalColor;
+    gAlbedoSpec.a = 0.0;
 }
